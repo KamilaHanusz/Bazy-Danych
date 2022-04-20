@@ -1,0 +1,232 @@
+-- Zadanie 1
+CREATE DATABASE Firma; --Utworzenie bazy danych
+
+
+--Zadnaie 2
+CREATE SCHEMA Księgowość; --Utworzenie schematu
+
+
+--Zadanie 4
+
+--Dodanie czterech tabeli do schematu Rozliczenia:
+
+CREATE TABLE Księgowość.Pracownicy (
+ID_pracownika INT PRIMARY KEY NOT NULL, --Klucz główny prosty
+Imie VARCHAR(50) NOT NULL,
+Nazwisko VARCHAR(50) NOT NULL,
+Adres VARCHAR(255),
+Telefon INT 
+);
+
+
+CREATE TABLE Księgowość.Godziny (
+ID_godziny INT PRIMARY KEY NOT NULL, --Klucz główny prosty
+Data DATE NOT NULL,
+Liczba_godzin FLOAT NOT NULL,
+ID_pracownika INT, --Klucz obcy
+CONSTRAINT fkID_G FOREIGN KEY (ID_pracownika) REFERENCES Księgowość.Pracownicy (ID_pracownika) --Dodanie klucza obcego
+);
+
+
+CREATE TABLE Księgowość.Premia (
+ID_premii INT PRIMARY KEY NOT NULL, --Klucz główny prosty
+Rodzaj VARCHAR(50),
+Kwota FLOAT NOT NULL DEFAULT 0
+);
+
+
+CREATE TABLE Księgowość.Pensja (
+ID_pensji INT PRIMARY KEY NOT NULL, --Klucz główny prosty
+Stanowisko VARCHAR(100) NOT NULL,
+Kwota FLOAT NOT NULL
+);
+
+
+CREATE TABLE Księgowość.Wynagrodzenie (
+ID_wynagrodzenia INT PRIMARY KEY NOT NULL, --Klucz główny prosty
+Data DATE NOT NULL,
+ID_pracownika INT, --Klucz obcy 
+ID_godziny INT, --Klucz obcy
+ID_pensji INT, --Klucz obcy
+ID_premii INT, --Klucz obcy
+CONSTRAINT fkID_W1 FOREIGN KEY (ID_pracownika) REFERENCES Księgowość.Pracownicy (ID_pracownika), --Dodanie klucza obcego
+CONSTRAINT fkID_W2 FOREIGN KEY (ID_godziny) REFERENCES Księgowość.Godziny (ID_godziny), --Dodanie klucza obcego
+CONSTRAINT fkID_W3 FOREIGN KEY (ID_pensji) REFERENCES Księgowość.Pensja (ID_pensji), --Dodanie klucza obcego
+CONSTRAINT fkID_W4 FOREIGN KEY (ID_premii) REFERENCES Księgowość.Premia (ID_premii) --Dodanie klucza obcego
+);
+
+COMMENT ON TABLE Księgowość.Pracownicy IS 'Wszyscy pracownicy firmy';
+COMMENT ON TABLE Księgowość.Godziny IS 'Liczba godzin przepracowanych danego dnia przez danego pracownika';
+COMMENT ON TABLE Księgowość.Premia IS 'Wysokość i rodzaj przyznanych premii';
+COMMENT ON TABLE Księgowość.Pensja IS 'Miesięczne pensje dla danych stanowisk pracy';
+COMMENT ON TABLE Księgowość.Wynagrodzenie IS 'Całkowite wynagrodzenie przyznane danemu pracownikowi (wraz z przyznaną premią)';
+
+--Zadanie 5
+
+-- Wypełnienie tabeli Pracownicy 10 rekordami: 
+INSERT INTO Księgowość.Pracownicy VALUES(1, 'Adam', 'Koj', '31867 Kraków al.Mickiewicza 15', 885632417);
+INSERT INTO Księgowość.Pracownicy VALUES(2, 'Ewa', 'Koc', '22005 Warszawa ul.Maki 22/34', 226547813);
+INSERT INTO Księgowość.Pracownicy VALUES(3, 'Stefan', 'Maj', '32890 Bochnia ul.Zwierzyniecka 5', 998547654);
+INSERT INTO Księgowość.Pracownicy VALUES(4, 'Mateusz', 'Kowalski', '32768 Wieliczka ul.Dobrzycka 78/1', 475654128);
+INSERT INTO Księgowość.Pracownicy VALUES(5, 'Katarzyna', 'Nowak', '33657 Niepołomice ul.Dąbrowskiej 80', 665862493);
+INSERT INTO Księgowość.Pracownicy VALUES(6, 'Jan', 'Adamczyk', '30059 Kraków ul.Prosta 65/45', 557259352);
+INSERT INTO Księgowość.Pracownicy VALUES(7, 'Weronika', 'Kula', '35890 Katowice ul.Magnoliowa 1b', 968542889);
+INSERT INTO Księgowość.Pracownicy VALUES(8, 'Filip', 'Las', '70388 Lublin ul.Zakątek 3/49', 557236487);
+INSERT INTO Księgowość.Pracownicy VALUES(9, 'Natalia', 'Drabek', '31098 Kraków ul.Krótka 56', 981547992);
+INSERT INTO Księgowość.Pracownicy VALUES(10, 'Wojciech', 'Maj', '90001 Łódź ul.Dąbrowskiej 3a', 585264153);
+
+
+-- Wypełnienie tabeli Godziny 10 rekordami: 
+INSERT INTO Księgowość.Godziny VALUES(1, '2022-03-22', 164, 2);
+INSERT INTO Księgowość.Godziny VALUES(2, '2022-03-22', 167, 4);
+INSERT INTO Księgowość.Godziny VALUES(3, '2022-03-22', 157, 5);
+INSERT INTO Księgowość.Godziny VALUES(4, '2022-03-22', 146, 8);
+INSERT INTO Księgowość.Godziny VALUES(5, '2022-03-22', 165, 9); 
+INSERT INTO Księgowość.Godziny VALUES(6, '2022-03-23', 144, 1);
+INSERT INTO Księgowość.Godziny VALUES(7, '2022-03-23', 156, 3);
+INSERT INTO Księgowość.Godziny VALUES(8, '2022-03-23', 168, 6);
+INSERT INTO Księgowość.Godziny VALUES(9, '2022-03-23', 126, 7);
+INSERT INTO Księgowość.Godziny VALUES(10, '2022-03-23', 167, 10);
+
+
+-- Wypełnienie tabeli Premia 10 rekordami: 
+INSERT INTO Księgowość.Premia VALUES(1, 'Za obniżenie kosztów działalności', 200); 
+INSERT INTO Księgowość.Premia VALUES(2, 'Za obniżenie kosztów działalności', 200); 
+INSERT INTO Księgowość.Premia VALUES(3, 'Za poprawę jakości', 100); 
+INSERT INTO Księgowość.Premia VALUES(4, 'Za poprawę jakości', 100);
+INSERT INTO Księgowość.Premia VALUES(5, 'Za poprawę jakości', 100); 
+INSERT INTO Księgowość.Premia VALUES(6, 'Za wyniki sprzedaży', 100); 
+INSERT INTO Księgowość.Premia VALUES(7, 'Za wyniki sprzedaży', 100); 
+INSERT INTO Księgowość.Premia VALUES(8, 'Za wyniki sprzedaży', 100);
+INSERT INTO Księgowość.Premia VALUES(9, 'Za przedterminowe wykonanie zadań', 150);
+INSERT INTO Księgowość.Premia VALUES(10, 'Za przedterminowe wykonanie zadań', 150);
+
+
+-- Wypełnienie tabeli Pensja 10 rekordami: 
+INSERT INTO Księgowość.Pensja VALUES(1, 'Kierownik działu sprzedaży', 4500);
+INSERT INTO Księgowość.Pensja VALUES(2, 'Kierownik zespołu', 4000);
+INSERT INTO Księgowość.Pensja VALUES(3, 'Zastępca kierownika zespołu', 3500);
+INSERT INTO Księgowość.Pensja VALUES(4, 'Kierownik projektu', 4000); 
+INSERT INTO Księgowość.Pensja VALUES(5, 'Przedstawiciel handlowy', 3000);
+INSERT INTO Księgowość.Pensja VALUES(6, 'Przedstawiciel handlowy', 3000);
+INSERT INTO Księgowość.Pensja VALUES(7, 'Product Manager', 4000);
+INSERT INTO Księgowość.Pensja VALUES(8, 'Kierownik dostaw', 4000);
+INSERT INTO Księgowość.Pensja VALUES(9, 'Zastępca kierownika dostaw', 3500);
+INSERT INTO Księgowość.Pensja VALUES(10, 'Specjalista ds. obsługi klienta', 3000);
+
+
+-- Wypełnienie tabeli Wynagrodzenie 10 rekordami: 
+INSERT INTO Księgowość.Wynagrodzenie VALUES(1, '2022-04-10', 1, 6, 1, 1);
+INSERT INTO Księgowość.Wynagrodzenie VALUES(2, '2022-04-10', 2, 1, 2, 3);
+INSERT INTO Księgowość.Wynagrodzenie VALUES(3, '2022-04-10', 3, 7, 3, NULL);
+INSERT INTO Księgowość.Wynagrodzenie VALUES(4, '2022-04-10', 4, 2, 4, 10); 
+INSERT INTO Księgowość.Wynagrodzenie VALUES(5, '2022-04-10', 5, 3, 5, 6);
+INSERT INTO Księgowość.Wynagrodzenie VALUES(6, '2022-04-10', 6, 8, 6, 7);
+INSERT INTO Księgowość.Wynagrodzenie VALUES(7, '2022-04-10', 7, 9, 7, 5);
+INSERT INTO Księgowość.Wynagrodzenie VALUES(8, '2022-04-10', 8, 4, 8, 2);
+INSERT INTO Księgowość.Wynagrodzenie VALUES(9, '2022-04-10', 9, 5, 9, 9);
+INSERT INTO Księgowość.Wynagrodzenie VALUES(10, '2022-04-10', 10, 10, 10, NULL);
+
+
+--Zadanie 6
+
+-- a) Wyświetlenie tylko id pracownika oraz jego nazwisko
+SELECT ID_pracownika, Nazwisko FROM Księgowość.Pracownicy;
+
+-- b) Wyświetlenie id pracowników, których płaca jest większa niż 1000
+SELECT Wynagrodzenie.ID_pracownika, Pensja.Kwota 
+FROM Księgowość.Wynagrodzenie
+JOIN Księgowość.Pensja
+ON Wynagrodzenie.ID_pensji = Pensja.ID_pensji
+WHERE Pensja.Kwota > 1000;
+
+--c) Wyświetlenie id pracowników nieposiadających premii, których płaca jest większa niż 2000 
+SELECT Wynagrodzenie.ID_pracownika, Pensja.Kwota
+FROM Księgowość.Wynagrodzenie
+JOIN Księgowość.Pensja
+ON Wynagrodzenie.ID_pensji = Pensja.ID_pensji
+WHERE Pensja.Kwota > 2000 AND Wynagrodzenie.ID_premii IS NULL;
+
+--d) Wyświetlenie pracowników, których pierwsza litera imienia zaczyna się na literę ‘J’
+SELECT * FROM Księgowość.Pracownicy WHERE Imie LIKE 'J%';
+
+--e) Wyświetlenie pracowników, których nazwisko zawiera literę ‘n’ oraz imię kończy się na literę ‘a’
+SELECT * FROM Księgowość.Pracownicy WHERE Nazwisko LIKE '%n%' AND Imie LIKE '%a';
+
+--f) Wyświetlenie imion i nazwisk pracowników oraz liczbę ich nadgodzin, przyjmując, iż standardowy czas pracy to 160 h miesięcznie
+SELECT Pracownicy.Imie, Pracownicy.Nazwisko, (Godziny.Liczba_godzin - 160) AS Liczba_nadgodzin
+FROM Księgowość.Pracownicy
+JOIN Księgowość.Wynagrodzenie
+ON Pracownicy.ID_pracownika = Wynagrodzenie.ID_pracownika
+JOIN Księgowość.Godziny
+ON Wynagrodzenie.ID_godziny = Godziny.ID_godziny;
+
+--g) Wyświetlenie imion i nazwisk pracowników, których pensja zawiera się w przedziale 1500 – 3000 PLN
+SELECT Pracownicy.Imie, Pracownicy.Nazwisko, Pensja.Kwota
+FROM Księgowość.Pracownicy
+JOIN Księgowość.Wynagrodzenie
+ON Pracownicy.ID_pracownika = Wynagrodzenie.ID_pracownika
+JOIN Księgowość.Pensja
+ON Wynagrodzenie.ID_pensji = Pensja.ID_pensji
+WHERE Pensja.Kwota BETWEEN 1500 AND 3000;
+
+--h) Wyświetlenie imion i nazwisk pracowników, którzy pracowali w nadgodzinach i nie otrzymali premii
+SELECT Pracownicy.Imie, Pracownicy.Nazwisko
+FROM Księgowość.Pracownicy
+JOIN Księgowość.Wynagrodzenie
+ON Pracownicy.ID_pracownika = Wynagrodzenie.ID_pracownika
+JOIN Księgowość.Godziny
+ON Wynagrodzenie.ID_godziny = Godziny.ID_godziny
+WHERE Godziny.Liczba_godzin > 160 AND Wynagrodzenie.ID_premii IS NULL;
+
+--i) Uszeregowanie pracowników według pensji
+SELECT Pracownicy.ID_pracownika, Pracownicy.Imie, Pracownicy.Nazwisko, Pensja.Kwota
+FROM Księgowość.Pracownicy
+JOIN Księgowość.Wynagrodzenie
+ON Pracownicy.ID_pracownika = Wynagrodzenie.ID_pracownika
+JOIN Księgowość.Pensja
+ON Wynagrodzenie.ID_pensji = Pensja.ID_pensji
+ORDER BY Pensja.Kwota;
+
+--j) Uszeregowanie pracowników według pensji i premii malejąco.
+SELECT Pracownicy.ID_pracownika, Pracownicy.Imie, Pracownicy.Nazwisko, Pensja.Kwota, Premia.Kwota
+FROM Księgowość.Pracownicy
+JOIN Księgowość.Wynagrodzenie
+ON Pracownicy.ID_pracownika = Wynagrodzenie.ID_pracownika
+JOIN Księgowość.Pensja
+ON Wynagrodzenie.ID_pensji = Pensja.ID_pensji
+JOIN Księgowość.Premia
+ON Wynagrodzenie.ID_premii = Premia.ID_premii
+ORDER BY Pensja.Kwota DESC, Premia.Kwota DESC;
+
+--k) Zliczenie i pogrupowanie pracowników według pola ‘stanowisko’
+SELECT Stanowisko, COUNT(Stanowisko) FROM Księgowość.Pensja GROUP BY Stanowisko;
+
+--l) Obliczenie średniej, minimalnej i maksymalnej płacy dla stanowiska ‘Kierownik projektu’ 
+SELECT Stanowisko, MIN(Kwota) AS Min_Kwota, MAX(Kwota) AS Max_Kwota, AVG(Kwota) AS Avg_Kwota 
+FROM Księgowość.Pensja 
+GROUP BY Stanowisko
+HAVING Stanowisko = 'Kierownik projektu';
+
+--m) Obliczenie sumy wszystkich wynagrodzeń
+SELECT SUM(Kwota) AS Suma_wszystkich_wynagrodzeń
+FROM Księgowość.Pensja;
+
+--f) Obliczenie sumy wynagrodzeń w ramach danego stanowiska
+SELECT Stanowisko, SUM(Kwota) AS Suma_wynagrodzeń
+FROM Księgowość.Pensja 
+GROUP BY Stanowisko;
+
+--g) Wyznaczenie liczby premii przyznanych dla pracowników danego stanowiska
+SELECT Pensja.Stanowisko, COUNT(ID_premii) AS Premii_dla_stanowski
+FROM Księgowość.Pensja 
+JOIN Księgowość.Wynagrodzenie ON Pensja.ID_pensji = Wynagrodzenie.ID_pensji
+GROUP BY Pensja.Stanowisko;
+
+--h) Usunięcie wszystkich pracowników mających pensję mniejszą niż 1200 zł
+ALTER TABLE Księgowość.Godziny DROP CONSTRAINT fkID_G;
+ALTER TABLE Księgowość.Wynagrodzenie DROP CONSTRAINT fkID_W1;
+DELETE FROM Księgowość.Pracownicy 
+WHERE ID_pracownika 
+IN (SELECT ID_pracownika FROM Księgowość.Wynagrodzenie WHERE ID_pensji IN 
+	(SELECT ID_pensji FROM Księgowość.Pensja WHERE Kwota < 1200) );
